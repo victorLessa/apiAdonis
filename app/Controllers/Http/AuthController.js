@@ -3,6 +3,12 @@
 const User = use('App/Models/User')
 
 class AuthController {
+
+    async show () {
+        const user = await User.query().with('tweets').fetch()
+        return user
+    }
+
     async register ({ request }) {
         const data = request.only(['email', 'password', 'username'])
         const user = await User.create(data)
