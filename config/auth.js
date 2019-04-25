@@ -67,6 +67,7 @@ module.exports = {
   */
   jwt: {
     serializer: 'lucid',
+    role: 'role',
     model: 'App/Models/User',
     scheme: 'jwt',
     uid: 'email',

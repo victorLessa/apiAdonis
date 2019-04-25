@@ -19,8 +19,9 @@ class TweetController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, auth }) {
     const tweets = await Tweet.query().with('user').fetch()
+    console.log(auth)
     return tweets
   }
 
