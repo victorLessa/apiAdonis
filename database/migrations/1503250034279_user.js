@@ -7,6 +7,13 @@ class UserSchema extends Schema {
   up () {
     this.create('users', (table) => {
       table.increments()
+      table.integer('user_address_id', 80)
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('users_addresses')
+        .onUpdate('CASCADE')
+        .onDelete('CASCADE')
       table.string('username', 80).notNullable().unique()
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()

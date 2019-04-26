@@ -3,6 +3,7 @@ const Database = use('Database')
 const Hash = use('Hash')
 const User = use('App/Models/User')
 const RoleUser = use('App/Models/RoleUser')
+const UserAddress = use('App/Models/UserAddress')
 class AuthController {
 
     async show () {
@@ -12,12 +13,32 @@ class AuthController {
 
     async register ({ request }) {
         const data = request.only(['email', 'password', 'username'])
-        const trx = await Database.beginTransaction()
-        console.log(data)
-        const user = await User.create(data, trx)
-        await RoleUser.create({ user_id: user.id, role_id: 1}, trx)
-        // once done commit the transaction
-        trx.commit()
+        // const trx = await Database.beginTransaction()
+        // await UserAddress.create(request.only(['label', '']))
+        const user = await Database.transaction(async (trx) => {
+            return await trx.insert(request.only([
+                'label', 
+                'street', 
+                'number',
+                'district',
+                'city',
+                'state',
+                'cep']))
+                .into('users_addresses')
+                .then(async (trxAddress) => {
+                    let data = request.only(['email', 'password', 'username', 'age'])
+                    data.password = await Hash.make(data.password)
+                    data.user_address_id = trxAddress[0]
+                    return await trx.insert(data).into('users')
+                        .then(async (trxUser) => {
+                            return await trx.insert({user_id: trxUser, role_id: 1}).into('role_users')
+                                .then(async (trxRole) => {
+                                    return await trx.table('users').select('*').where('id', trxUser)
+                                })
+                        })
+                    // await User.create(data)
+                })
+          })
         return user
     }
 
