@@ -24,3 +24,11 @@ Route.get('/app', 'AppController.index').middleware(['auth'])
 Route.group(() => {
     Route.resource('tweets', 'TweetController').apiOnly().except('update')
 }).middleware('auth')
+
+Route.group(() => { 
+    Route.post('/aluno', 'AuthController.registerAluno')
+}).prefix('api/v1')
+
+Route.group(() => { 
+    Route.post('/professor', 'TeacherController.registerTeacher')
+}).prefix('api/v1')
