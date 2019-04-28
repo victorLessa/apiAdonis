@@ -14,11 +14,6 @@ class AuthController {
         return 'Login realizado com sucesso'
     }
 
-    async registerAluno ({ request, auth }) {
-        const result = await serviceAdmin.registerAluno(request)
-        return 'Login realizado com sucesso'
-    }
-
     async authenticate ({ request, auth }) {
         const result = await serviceAdmin.authenticate(request, auth)
         return result

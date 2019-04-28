@@ -1,0 +1,6 @@
+table dos professores
+tabela de materias onde os professores serão relacionada com elas
+tabela das turmas onde os professores serão relacionado com essas turmas
+estudar mongoDb
+flutter
+docker

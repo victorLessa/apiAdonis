@@ -21,7 +21,6 @@ class TweetController {
    */
   async index ({ request, response, auth }) {
     const tweets = await Tweet.query().with('user').fetch()
-    console.log(auth)
     return tweets
   }
 
@@ -79,7 +78,7 @@ class TweetController {
     const tweet = await Tweet.findOrFail(params.id)
 
     if (tweet.user_id !== auth.user.id) {
-      return Response.status(401)
+      return Response.status(401).send('Usuario sem permissão')
     }
 
     await tweet.delete()
