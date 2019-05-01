@@ -3,30 +3,29 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class TeacherClassRoomsSchema extends Schema {
+class ProfessionsUsersSchema extends Schema {
   up () {
-    this.create('teacher_class_rooms', (table) => {
-      table.integer('teacher_id')
+    this.create('professions_users', (table) => {
+      table.integer('user_id').notNullable()
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('teachers')
+        .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.integer('class_room_id')
+      table.integer('professions_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('class_rooms')
+        .inTable('professions')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.timestamps()
     })
   }
 
   down () {
-    this.drop('teacher_class_rooms')
+    this.drop('professions_users')
   }
 }
 
-module.exports = TeacherClassRoomsSchema
+module.exports = ProfessionsUsersSchema

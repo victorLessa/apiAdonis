@@ -3,9 +3,10 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class RoleSchema extends Schema {
+class MatterUserSchema extends Schema {
   up () {
-    this.create('role_users', (table) => {
+    this.create('matter_users', (table) => {
+      table.increments()
       table.integer('user_id')
         .unsigned()
         .notNullable()
@@ -13,20 +14,20 @@ class RoleSchema extends Schema {
         .inTable('users')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
-      table.integer('role_id')
-        .notNullable()
+      table.integer('matter_id')
         .unsigned()
         .notNullable()
         .references('id')
-        .inTable('roles')
+        .inTable('matters')
         .onUpdate('CASCADE')
         .onDelete('CASCADE')
+      table.timestamps()
     })
   }
 
   down () {
-    this.drop('roles_users')
+    this.drop('matter_users')
   }
 }
 
-module.exports = RoleSchema
+module.exports = MatterUserSchema

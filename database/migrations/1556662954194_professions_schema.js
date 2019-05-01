@@ -3,19 +3,18 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class ClassRoomSchema extends Schema {
+class ProfessionsSchema extends Schema {
   up () {
-    this.create('class_rooms', (table) => {
+    this.create('professions', (table) => {
       table.increments()
       table.string('name').notNullable()
-      table.string('turno').notNullable()
       table.timestamps()
     })
   }
 
   down () {
-    this.drop('class_rooms')
+    this.drop('professions')
   }
 }
 
-module.exports = ClassRoomSchema
+module.exports = ProfessionsSchema

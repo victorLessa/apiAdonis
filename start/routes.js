@@ -30,5 +30,12 @@ Route.group(() => {
 }).prefix('api/v1').middleware('auth')
 
 Route.group(() => { 
+    Route.post('/admin', 'AuthController.register')
+}).prefix('api/v1').middleware('auth')
+
+Route.group(() => { 
+    Route.get('/professor', 'TeacherController.index')
     Route.post('/professor', 'TeacherController.registerTeacher')
+    Route.patch('/professor', 'TeacherController.update')
+    Route.delete('/professor/:id', 'TeacherController.destroy')
 }).prefix('api/v1').middleware('auth')

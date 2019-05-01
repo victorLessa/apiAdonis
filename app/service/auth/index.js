@@ -4,7 +4,6 @@ const Database = use('Database')
 const Hash = use('Hash')
 class Admin {
   async register(request) {
-    const data = request.only(['email', 'password', 'username'])
     // const trx = await Database.beginTransaction()
     // await UserAddress.create(request.only(['label', '']))
     await Database.transaction(async (trx) => {
@@ -18,7 +17,7 @@ class Admin {
         'cep']))
         .into('users_addresses')
         .then(async (trxAddress) => {
-          let data = request.only(['email', 'password', 'username', 'age'])
+          let data = request.only(['email', 'password', 'first_name', 'last_name', 'age', 'cpf'])
           data.password = await Hash.make(data.password)
           data.user_address_id = trxAddress[0]
           await trx.insert(data).into('users')

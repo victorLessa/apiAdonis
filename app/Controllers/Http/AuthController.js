@@ -11,7 +11,7 @@ class AuthController {
 
     async register ({ request }) {
         await serviceAdmin.register(request)
-        return 'Login realizado com sucesso'
+        return {result:'Login realizado com sucesso'}
     }
 
     async authenticate ({ request, auth }) {
