@@ -18,14 +18,6 @@ class AuthController {
         const result = await serviceAdmin.authenticate(request, auth)
         return result
     }
-    
-    async registerStudent ({ request, response, auth }) {
-        if (auth.jwtPayload.data.role !== 1) {
-            return response.status(402).send({ result:'Token invalido'})
-        }
-        await serviceAdmin.registerStudent(request)
-        return {result: 'Cadastro de aluno realizado com sucesso'}
-    }
 }
 
 module.exports = AuthController

@@ -31,7 +31,8 @@ Route.group(() => {
 
 Route.group(() => { 
     Route.post('/admin', 'AuthController.register')
-    Route.post('/admin/student/signup', 'AuthController.registerStudent')
+    Route.post('/admin/student/signup', 'StudentController.registerStudent')
+    Route.post('/admin/teacher/signup', 'TeacherController.registerTeacher')
 }).prefix('api/v1').middleware('auth')
 
 Route.group(() => { 

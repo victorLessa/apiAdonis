@@ -5,12 +5,12 @@ class StudentControllxer {
         this.serviceStudent = new service()
     }
 
-    async registerAluno ({ request, response, auth }) {
+    async registerStudent ({ request, response, auth }) {
         if (auth.jwtPayload.data.role !== 1) {
             response.status(401).send('Usuario sem permissão')
             return
         }
-        await this.serviceStudent.registerAluno(request)
+        await this.serviceStudent.registerStudent(request)
         return 'Login realizado com sucesso'
     }
 }
