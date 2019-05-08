@@ -33,7 +33,6 @@ class ProfessorController {
 
     async update ({ params, request, response, auth }) {
         const data = request.all()
-        console.log(data)
         const update = await User
             .query()
             .where('id', auth.jwtPayload.data.id)

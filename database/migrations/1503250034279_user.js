@@ -18,8 +18,6 @@ class UserSchema extends Schema {
       table.string('last_name', 80).notNullable()
       table.string('email', 254).notNullable().unique()
       table.string('password', 60).notNullable()
-      table.integer('age', 60)
-      table.bigint('cpf', 12).unique()
       table.timestamps()
     })
   }

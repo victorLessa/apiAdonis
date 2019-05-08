@@ -17,8 +17,8 @@ class RoleSeeder {
   async run () {
     let roles = [
       {name: 'Admin', description: 'Administrador'},
-      {name: 'Teacher', description: 'Administrador'},
-      {name: 'Student', description: 'Administrador'}
+      {name: 'Teacher', description: 'Professor'},
+      {name: 'Student', description: 'Aluno'}
     ]
     await Database.from('roles').insert(roles)
   }
