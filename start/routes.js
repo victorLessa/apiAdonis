@@ -26,6 +26,7 @@ Route.group(() => {
 }).middleware('auth')
 
 Route.group(() => { 
+    Route.get('/aluno', 'StudentController.index')
     Route.post('/aluno', 'StudentController.registerAluno')
 }).prefix('api/v1').middleware('auth')
 
