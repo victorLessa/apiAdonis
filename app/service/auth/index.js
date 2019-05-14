@@ -39,8 +39,8 @@ class Admin {
   }
 
   async authenticate(request, response, auth) {
-    const { email, password } = request.all()
     try {
+      const { email, password } = request.all()
       let user = await Database
         .select()
         .from('users')
@@ -56,9 +56,6 @@ class Admin {
           throw new CustomException().handle('Email invalido', response, 500)
         }
       const isPass = await Hash.verify(password, user.password)
-      // console.log(user)
-      console.log(isPass)
-      // console.log(user.role_id)
       if (isPass) {
         if (user.role_id === 3) {
           let details = await Database
@@ -85,7 +82,6 @@ class Admin {
             )
           const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
           const token = await auth.attempt(email, password, jwtPayload)
-          // let details = {users, students, token}
           details.token = token.token
           return details
         }
@@ -114,7 +110,6 @@ class Admin {
             )
           const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
           const token = await auth.attempt(email, password, jwtPayload)
-          // let details = {users, students, token}
           details.token = token.token
           return details
 
