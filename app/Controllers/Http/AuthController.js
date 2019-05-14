@@ -14,8 +14,8 @@ class AuthController {
         return {result:'Cadastro realizado com sucesso'}
     }
 
-    async authenticate ({ request, auth }) {
-        const result = await serviceAdmin.authenticate(request, auth)
+    async authenticate ({ request, response, auth }) {
+        const result = await serviceAdmin.authenticate(request, response, auth)
         return result
     }
 }

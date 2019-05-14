@@ -45,6 +45,10 @@ class User extends Model {
     return this.hasOne('App/Models/Student')
   }
 
+  teacher () {
+    return this.hasOne('App/Models/Teacher')
+  }
+
   tweets () {
     return this.hasMany('App/Models/Tweet')
   }
