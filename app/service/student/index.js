@@ -22,6 +22,25 @@ class Student {
         })
     })
   }
+/**
+ * method update table users and students
+ * @param {Stance} Student 
+ * @param {Object} request 
+ * @param {Object} response 
+ * @param {Object} auth
+ *  
+ */
+  async update (Student, request, response, auth) {
+    await Database.transaction(async (trx) => {
+      let { user } = request.all()
+      await trx.update(user).table('users').where('id', auth.jwtPayload.data.id)
+        .then(async (trxUser) => {
+          console.log(trxUser)
+          let { student_detials } = request.all()
+          await trx.update(student_detials).table('students').where('user_id', auth.jwtPayload.data.id)
+        })
+    })
+  }
 }
 
 module.exports = Student

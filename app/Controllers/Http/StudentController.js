@@ -28,6 +28,15 @@ class StudentController {
         await this.serviceStudent.registerStudent(request)
         return 'Login realizado com sucesso'
     }
+
+    async update ({ request, response, auth }) {
+        if (auth.jwtPayload.data.role != 1 && auth.jwtPayload.data.role != 3) {
+            response.status(401).send('Token invalido')
+            return
+        }
+        const student = await this.serviceStudent.update(Student, request, response, auth)
+        return 'ok'
+    }
 }
 
 module.exports = StudentController
