@@ -38,6 +38,75 @@ class Admin {
     })
   }
 
+  async getDetailsTeacher(user, password, email, auth) {
+    let details = await Database
+    .select().from('users')
+    .leftJoin('users_addresses', 'users.user_address_id', 'users_addresses.id')
+    .leftJoin('teachers', 'teachers.user_id', 'users.id')
+    .where(
+      'users.id', user.id
+    ).first(
+      'users.first_name',
+      'users.last_name',
+      'users.user_address_id',
+      'users.email',
+      'teachers.age',
+      'teachers.birthday',
+      'teachers.cpf',
+      'users_addresses.label',
+      'users_addresses.street',
+      'users_addresses.number',
+      'users_addresses.district',
+      'users_addresses.city',
+      'users_addresses.state',
+      'users_addresses.cep'
+    )
+    const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
+    const token = await auth.attempt(email, password, jwtPayload)
+    details.permission = 'Teacher'
+    details.isAdmin = false
+    details.token = token.token
+    return details
+  }
+
+  async getDetailsStudent(user, password, email, auth) {
+    let details = await Database
+    .select().from('users')
+    .leftJoin('users_addresses', 'users.user_address_id', 'users_addresses.id')
+    .leftJoin('students', 'students.user_id', 'users.id')
+    .where(
+      'users.id', user.id
+    ).first(
+      'users.first_name',
+      'users.last_name',
+      'users.user_address_id',
+      'users.email',
+      'students.age',
+      'students.birthday',
+      'students.cpf',
+      'users_addresses.label',
+      'users_addresses.street',
+      'users_addresses.number',
+      'users_addresses.district',
+      'users_addresses.city',
+      'users_addresses.state',
+      'users_addresses.cep'
+    )
+    const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
+    const token = await auth.attempt(email, password, jwtPayload)
+    details.token = token.token
+    details.permission = 'Student'
+    details.isAdmin = false
+    return details
+  }
+
+  async getDetailsAdmin(user, password, email, auth) {
+    const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
+    const token = await auth.attempt(email, password, jwtPayload)
+    let obj = {isAdmin: true, permission: 'Manager', ...token}
+    return obj
+  }
+
   async authenticate(request, response, auth) {
     try {
       const { email, password } = request.all()
@@ -58,61 +127,11 @@ class Admin {
       const isPass = await Hash.verify(password, user.password)
       if (isPass) {
         if (user.role_id === 3) {
-          let details = await Database
-            .select().from('users')
-            .leftJoin('users_addresses', 'users.user_address_id', 'users_addresses.id')
-            .leftJoin('students', 'students.user_id', 'users.id')
-            .where(
-              'users.id', user.id
-            ).first(
-              'users.first_name',
-              'users.last_name',
-              'users.user_address_id',
-              'users.email',
-              'students.age',
-              'students.birthday',
-              'students.cpf',
-              'users_addresses.label',
-              'users_addresses.street',
-              'users_addresses.number',
-              'users_addresses.district',
-              'users_addresses.city',
-              'users_addresses.state',
-              'users_addresses.cep'
-            )
-          const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
-          const token = await auth.attempt(email, password, jwtPayload)
-          details.token = token.token
-          return details
-        }
-        if (user.role_id === 2) {
-          let details = await Database
-            .select().from('users')
-            .leftJoin('users_addresses', 'users.user_address_id', 'users_addresses.id')
-            .leftJoin('teachers', 'teachers.user_id', 'users.id')
-            .where(
-              'users.id', user.id
-            ).first(
-              'users.first_name',
-              'users.last_name',
-              'users.user_address_id',
-              'users.email',
-              'teachers.age',
-              'teachers.birthday',
-              'teachers.cpf',
-              'users_addresses.label',
-              'users_addresses.street',
-              'users_addresses.number',
-              'users_addresses.district',
-              'users_addresses.city',
-              'users_addresses.state',
-              'users_addresses.cep'
-            )
-          const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
-          const token = await auth.attempt(email, password, jwtPayload)
-          details.token = token.token
-          return details
-
+          return this.getDetailsStudent(user, password, email, auth)
+        } else if (user.role_id === 2) {
+          return this.getDetailsTeacher(user, password, email, auth)
+        } else if (user.role_id === 1) {
+          return this.getDetailsAdmin(user, password, email, auth)
         }
       } else {
         throw new CustomException().handle('Senha invalida', response, 500)

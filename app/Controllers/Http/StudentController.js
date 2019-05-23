@@ -35,7 +35,7 @@ class StudentController {
             return
         }
         const student = await this.serviceStudent.update(Student, request, response, auth)
-        return 'ok'
+        return response.status(200).send({status: 'success', result: 'Atualizado com sucesso'})
     }
 }
 

@@ -12,11 +12,15 @@ class Teacher {
           user.password = await Hash.make(user.password)
           await trx.insert(user).into('users')
             .then(async (trxUser) => {
-              await trx.insert({ user_id: trxUser, role_id: 2}).into('role_users')
-                .then(async (trxRole) => {
-                  let { teacher_detials } = request.all()
-                  teacher_detials.user_id = trxUser
-                  await trx.insert(teacher_detials).into('teachers')
+              let { matter_user } = request.all()
+              await trx.insert({user_id: trxUser, matter_id: matter_user.matter_id}).into('matter_users')
+              .then(async (trxMatter) => {
+                await trx.insert({ user_id: trxUser, role_id: 2}).into('role_users')
+                  .then(async (trxRole) => {
+                    let { teacher_detials } = request.all()
+                    teacher_detials.user_id = trxUser
+                    await trx.insert(teacher_detials).into('teachers')
+                  })
                 })
             })
         })
