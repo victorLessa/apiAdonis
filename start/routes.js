@@ -32,6 +32,7 @@ Route.group(() => {
 }).prefix('api/v1').middleware('auth')
 
 Route.group(() => { 
+    Route.get('/admin/class', 'ClassController.index')
     Route.post('/admin', 'AuthController.register')
     Route.post('/admin/student/signup', 'StudentController.registerStudent')
     Route.post('/admin/teacher/signup', 'TeacherController.registerTeacher')

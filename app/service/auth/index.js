@@ -5,6 +5,8 @@ const Hash = use('Hash')
 const Users = use('App/Models/User')
 const Students = use('App/Models/Student')
 const Teachers = use('App/Models/Teacher')
+const ClassUser = use('App/Models/ClassUser')
+const Class = use('App/Models/Class')
 const CustomException = use('App/Exceptions/CustomException')
 class Admin {
   async register(request) {
@@ -74,6 +76,8 @@ class Admin {
     .select().from('users')
     .leftJoin('users_addresses', 'users.user_address_id', 'users_addresses.id')
     .leftJoin('students', 'students.user_id', 'users.id')
+    .leftJoin('class_users', 'class_users.user_id', 'users.id')
+    .leftJoin('classes', 'classes.id', 'class_users.class_id')
     .where(
       'users.id', user.id
     ).first(
@@ -82,8 +86,11 @@ class Admin {
       'users.user_address_id',
       'users.email',
       'students.age',
+      'users.id',
       'students.birthday',
       'students.cpf',
+      'classes.name as className',
+      'classes.name as className2',
       'users_addresses.label',
       'users_addresses.street',
       'users_addresses.number',
@@ -92,11 +99,18 @@ class Admin {
       'users_addresses.state',
       'users_addresses.cep'
     )
+    let classes = await Class.query().with('classes', obj => obj.where('user_id', user.id)).fetch()
+    let classes_rooms = []
+    classes = classes.toJSON()
+    for (let i = 0; i < classes.length; i++) {
+      classes_rooms.push(classes[i].name)
+    }
     const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
     const token = await auth.attempt(email, password, jwtPayload)
     details.token = token.token
     details.permission = 'Student'
     details.isAdmin = false
+    details.classes_rooms = classes_rooms
     return details
   }
 
