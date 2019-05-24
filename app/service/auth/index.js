@@ -63,11 +63,18 @@ class Admin {
       'users_addresses.state',
       'users_addresses.cep'
     )
+    let classes = await Class.query().with('classes', obj => obj.where('user_id', user.id)).fetch()
+    let classes_rooms = []
+    classes = classes.toJSON()
+    for (let i = 0; i < classes.length; i++) {
+      classes_rooms.push(classes[i].name)
+    }
     const jwtPayload = { id: user.id, email: user.email, role: user.role_id }
     const token = await auth.attempt(email, password, jwtPayload)
+    details.token = token.token
     details.permission = 'Teacher'
     details.isAdmin = false
-    details.token = token.token
+    details.classes_rooms = classes_rooms
     return details
   }
 
