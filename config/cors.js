@@ -16,7 +16,10 @@ module.exports = {
   | Function - Receives the current origin and should return one of the above values.
   |
   */
-  origin: false,
+  // origin: false,
+  origin: function (currentOrigin) {
+    return currentOrigin === 'http://localhost:8080'
+  },
 
   /*
   |--------------------------------------------------------------------------
@@ -30,7 +33,6 @@ module.exports = {
   |
   */
   methods: ['GET', 'PUT', 'PATCH', 'POST', 'DELETE'],
-
   /*
   |--------------------------------------------------------------------------
   | Headers

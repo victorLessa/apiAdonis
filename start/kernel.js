@@ -38,7 +38,6 @@ const namedMiddleware = {
   auth: 'Adonis/Middleware/Auth',
   guest: 'Adonis/Middleware/AllowGuestOnly'
 }
-
 /*
 |--------------------------------------------------------------------------
 | Server Middleware
@@ -55,6 +54,6 @@ const serverMiddleware = [
 ]
 
 Server
-  .registerGlobal(globalMiddleware)
-  .registerNamed(namedMiddleware)
-  .use(serverMiddleware)
+.registerGlobal(globalMiddleware)
+.registerNamed(namedMiddleware)
+.use(serverMiddleware)
